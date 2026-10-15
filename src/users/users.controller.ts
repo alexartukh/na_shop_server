@@ -1,4 +1,5 @@
-import { Controller, Get, Param, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Req, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { UsersService } from './users.service';
 import { User } from './user.entity'
 import { MyAuthGuard } from '../auth/auth.guard';
@@ -15,6 +16,12 @@ export class UsersController {
   @Get('')
   async getAllUsers(): Promise<User[]> {
     return this.usersService.getAllUsers();
+  }
+
+  // 'me' стоит выше ':id' — иначе /users/me попадёт в ':id'
+  @Get('me')
+  async me(@Req() request: Request): Promise<User | null> {
+    return this.usersService.getSpecificUser(request['user'].sub);
   }
 
   @Get(':id')

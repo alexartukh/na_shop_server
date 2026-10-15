@@ -11,11 +11,13 @@ export class OrdersService {
         this.ordersRepository = ordersRepository
     }
 
-    async getAllOrders(): Promise<Order[]> {
-        return this.ordersRepository.find()
+    // только заказы этого пользователя
+    async getAllOrders(userId: number): Promise<Order[]> {
+        return this.ordersRepository.find({ where: { user_id: String(userId) } })
     }
 
-    async getSpecificOrder(id: number): Promise<Order | null> {
-        return this.ordersRepository.findOne({ where: { id } })
+    // чужой заказ не найдётся → null → 404
+    async getSpecificOrder(id: number, userId: number): Promise<Order | null> {
+        return this.ordersRepository.findOne({ where: { id, user_id: String(userId) } })
     }
 }

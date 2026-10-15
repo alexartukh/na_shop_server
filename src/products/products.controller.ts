@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, NotFoundException, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity'
 import { CreateProductDto } from './dto/create-product.dto';
+import { MyAuthGuard } from '../auth/auth.guard'
 
 @Controller('products')
 export class ProductsController {
@@ -26,6 +27,7 @@ export class ProductsController {
   }
 
   @Post()
+  @UseGuards(MyAuthGuard)
   async create(@Body() dto: CreateProductDto): Promise<Product> {
     return this.productsService.create(dto);
   }
