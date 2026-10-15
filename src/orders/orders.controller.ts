@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Req, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.entity'
+import { OrderItem } from './order-item.entity'
 import { MyAuthGuard } from '../auth/auth.guard';
 import type { Request } from 'express'
 
@@ -23,6 +24,16 @@ export class OrdersController {
   async getSpecificOrder(@Param('orderId', ParseIntPipe) orderId: number, @Req() request: Request): Promise<Order | null> {
     const userId = request['user'].sub;
     let res = await this.ordersService.getSpecificOrder(orderId, userId);
+    if (res == null) {
+      throw new NotFoundException
+    }
+    return res
+  }
+
+  @Get(':orderId/items')
+  async getOrderItems(@Param('orderId', ParseIntPipe) orderId: number, @Req() request: Request): Promise<OrderItem[]> {
+    const userId = request['user'].sub;
+    let res = await this.ordersService.getOrderItems(orderId, userId);
     if (res == null) {
       throw new NotFoundException
     }
