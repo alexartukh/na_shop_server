@@ -1,7 +1,9 @@
-import { Controller, Get, Param, NotFoundException, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity'
+import { MyAuthGuard } from '../auth/auth.guard';
 
+@UseGuards(MyAuthGuard)
 @Controller('users')
 export class UsersController {
   private readonly usersService: UsersService;

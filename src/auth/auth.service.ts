@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { UsersService } from '../users/users.service';
+import type { JwtPayload } from './jwt-payload';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,8 @@ export class AuthService {
             throw new UnauthorizedException('Invalid email or password')
         }
 
-        const payload = { sub: user.id, role: user.role }
+        // id из Postgres (bigint) приходит строкой — в токене храним число
+        const payload: JwtPayload = { sub: Number(user.id), role: user.role }
         return { accessToken: await this.jwtService.signAsync(payload) }
     }
 }
