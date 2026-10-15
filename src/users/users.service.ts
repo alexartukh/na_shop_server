@@ -5,11 +5,10 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-    constructor(
-        @InjectRepository(User)
-        private readonly usersRepository: Repository<User>,
-    ) {
-        
+    private readonly usersRepository: Repository<User>
+
+    constructor(@InjectRepository(User) usersRepository: Repository<User>) {
+        this.usersRepository = usersRepository
     }
 
     async getAllUsers(): Promise<User[]> {
@@ -18,5 +17,13 @@ export class UsersService {
 
     async getSpecificUser(id: number): Promise<User | null> {
         return this.usersRepository.findOne({ where: { id } })
+    }
+
+    async findByEmailWithPassword(email:string): Promise<User | null> {
+        return this.usersRepository
+            .createQueryBuilder('u')
+            .addSelect('u.encrypted_password')
+            .where('u.email = :email', { email: email.toLowerCase() })
+            .getOne()
     }
 }

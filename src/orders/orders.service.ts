@@ -5,11 +5,10 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class OrdersService {
-    constructor(
-        @InjectRepository(Order)
-        private readonly ordersRepository: Repository<Order>,
-    ) {
-        
+    private readonly ordersRepository: Repository<Order>
+
+    constructor(@InjectRepository(Order) ordersRepository: Repository<Order>) {
+        this.ordersRepository = ordersRepository
     }
 
     async getAllOrders(): Promise<Order[]> {

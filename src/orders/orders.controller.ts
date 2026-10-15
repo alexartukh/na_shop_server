@@ -4,7 +4,11 @@ import { Order } from './order.entity'
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  private readonly ordersService: OrdersService;
+
+  constructor(ordersService: OrdersService) {
+    this.ordersService = ordersService;
+  }
 
   @Get('')
   async getAllOrders(): Promise<Order[]> {

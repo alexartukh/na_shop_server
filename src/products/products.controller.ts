@@ -5,7 +5,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  private readonly productsService: ProductsService;
+
+  constructor(productsService: ProductsService) {
+    this.productsService = productsService;
+  }
 
   @Get('')
   async getAllProducts(): Promise<Product[]> {

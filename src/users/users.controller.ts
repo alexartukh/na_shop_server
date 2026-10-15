@@ -4,7 +4,11 @@ import { User } from './user.entity'
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly usersService: UsersService;
+
+  constructor(usersService: UsersService) {
+    this.usersService = usersService;
+  }
 
   @Get('')
   async getAllUsers(): Promise<User[]> {
